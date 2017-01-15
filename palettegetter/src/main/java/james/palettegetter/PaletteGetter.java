@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
@@ -19,7 +18,7 @@ public class PaletteGetter {
 
     @Nullable
     @ColorInt
-    public static Integer getColor(Context context, ComponentName componentName) {
+    public static Integer get(Context context, ComponentName componentName) {
         PackageManager packageManager = context.getPackageManager();
 
         ActivityInfo activityInfo = null;
@@ -59,7 +58,17 @@ public class PaletteGetter {
         return null;
     }
 
-    public static List<Integer> getColors(Context context, String packageName) {
+    @Nullable
+    @ColorInt
+    public static Integer get(Context context, String packageName) {
+        try {
+            return getPalette(context, packageName).get(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static List<Integer> getPalette(Context context, String packageName) {
         List<Integer> colors = new ArrayList<>();
 
         PackageManager packageManager = context.getPackageManager();
@@ -118,7 +127,7 @@ public class PaletteGetter {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    colors.add(lightColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
+                    colors.add(ColorUtils.lightColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
@@ -142,20 +151,6 @@ public class PaletteGetter {
         }
 
         return colors;
-    }
-
-    @ColorInt
-    private static int darkColor(@ColorInt int color) {
-        return Color.argb(255, addToColorPart(Color.red(color), -70), addToColorPart(Color.green(color), -70), addToColorPart(Color.blue(color), -70));
-    }
-
-    @ColorInt
-    private static int lightColor(@ColorInt int color) {
-        return Color.argb(255, addToColorPart(Color.red(color), 70), addToColorPart(Color.green(color), 70), addToColorPart(Color.blue(color), 70));
-    }
-
-    private static int addToColorPart(int colorPart, int variable) {
-        return Math.max(0, Math.min(255, colorPart + variable));
     }
 
 }
