@@ -1,5 +1,4 @@
-# PaletteGetter
-A library that can get the color scheme of any app.
+PaletteGetter is a library that attempts to reliably obtain the color scheme of any app from just the package or component name.
 
 For testing and experimentation purposes, a sample apk can be downloaded [here](https://github.com/TheAndroidMaster/PaletteGetter/releases).
 
